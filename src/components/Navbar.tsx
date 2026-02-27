@@ -77,9 +77,8 @@ export default function Navbar({ lang, setLang }: NavbarProps) {
     id: string,
   ) => {
     e.preventDefault();
-    setIsOpen(false); // Tutup menu mobile
+    setIsOpen(false);
 
-    // Jika klik saat di halaman paling atas (misal mau ke Hero), reset URL hash
     if (id === "") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
@@ -88,7 +87,8 @@ export default function Navbar({ lang, setLang }: NavbarProps) {
     const element = document.getElementById(id);
     if (element) {
       window.scrollTo({
-        top: element.offsetTop - 80, // Dikurangi 80px agar konten tidak tertutup tinggi Navbar
+        // Hapus pengurangan -80 agar posisi berhenti benar-benar nge-pas di garis batas section
+        top: element.offsetTop,
         behavior: "smooth",
       });
     }

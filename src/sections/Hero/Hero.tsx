@@ -2,6 +2,7 @@
 
 import { useState, MouseEvent, useEffect } from "react";
 import Beams from "../../animations/Beams";
+import { motion, Variants } from "framer-motion";
 
 const projectImages = [
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop",
@@ -53,6 +54,30 @@ export default function Hero({ lang }: HeroProps) {
   };
 
   const t = content[lang];
+
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.05,
+      },
+    },
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring", // Sekarang TypeScript tidak akan protes lagi!
+        stiffness: 120,
+        damping: 14,
+      },
+    },
+  };
 
   return (
     <section
@@ -116,15 +141,26 @@ export default function Hero({ lang }: HeroProps) {
       </div>
 
       {/* --- Main Foreground Content --- */}
-      <div className="relative z-20 flex flex-col items-center justify-center w-full px-6 text-center">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8">
+      <motion.div
+        className="relative z-20 flex flex-col items-center justify-center w-full px-6 text-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-8"
+        >
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_rgba(52,211,153,0.5)]"></span>
           <span className="text-sm font-medium text-gray-300 tracking-wide">
             {t.badge}
           </span>
-        </div>
+        </motion.div>
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[1.1] text-gray-100 transition-all">
+        <motion.h1
+          variants={itemVariants}
+          className="text-5xl md:text-7xl lg:text-8xl font-medium tracking-tight leading-[1.1] text-gray-100 transition-all"
+        >
           {t.title1} <br />
           <span
             className="text-transparent bg-clip-text bg-gradient-to-r from-gray-100 to-gray-500 cursor-pointer transition-all duration-500 relative"
@@ -136,18 +172,21 @@ export default function Hero({ lang }: HeroProps) {
               className={`absolute -bottom-2 left-0 h-[2px] bg-white/30 transition-all duration-500 ${isHovering ? "w-full" : "w-0"}`}
             ></span>
           </span>
-        </h1>
+        </motion.h1>
 
-        <p className="mt-8 text-lg md:text-xl text-gray-400 max-w-2xl font-light leading-relaxed">
+        <motion.p
+          variants={itemVariants}
+          className="mt-8 text-lg md:text-xl text-gray-400 max-w-2xl font-light leading-relaxed"
+        >
           {t.desc}
-        </p>
+        </motion.p>
 
-        <div className="mt-12 flex gap-6">
+        <motion.div variants={itemVariants} className="mt-12 flex gap-6">
           <button className="text-sm uppercase tracking-widest font-semibold pb-1 border-b border-white/30 hover:border-white transition-colors">
             {t.btn}
           </button>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* --- Scroll Indicator --- */}
       <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-20 opacity-60">
