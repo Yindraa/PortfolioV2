@@ -87,7 +87,6 @@ export default function Navbar({ lang, setLang }: NavbarProps) {
     const element = document.getElementById(id);
     if (element) {
       window.scrollTo({
-        // Hapus pengurangan -80 agar posisi berhenti benar-benar nge-pas di garis batas section
         top: element.offsetTop,
         behavior: "smooth",
       });
