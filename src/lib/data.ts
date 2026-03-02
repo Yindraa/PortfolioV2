@@ -22,12 +22,11 @@ export interface Certificate {
   credentialUrl: string;
 }
 
-// Update: Menambahkan property 'relatedSkills' untuk menggabungkan skill ke layanan
 export interface Service {
   title: string;
   desc: string;
   icon: string;
-  relatedSkills: string[]; // Array nama skill, misal: ["React", "Next.js"]
+  relatedSkills: string[];
 }
 
 export interface Experience {
@@ -43,9 +42,11 @@ export interface Experience {
 export interface Project {
   id: string;
   title: string;
+  category: string; // Kategori singkat untuk Filter (Web App, Desktop App, dll)
   techStack: string[];
   description: string;
-  image: string;
+  image: string; // Thumbnail Utama
+  gallery: string[]; // Array Foto untuk Modal
   linkUrl?: string;
   githubUrl?: string;
 }
@@ -71,6 +72,7 @@ export interface PortfolioData {
 // --- MAIN DATA ---
 
 export const portfolioData: PortfolioData = {
+  // --- SKILLS (Universal) ---
   skills: [
     // Frontend
     {
@@ -99,7 +101,7 @@ export const portfolioData: PortfolioData = {
       logo: "https://cdn.simpleicons.org/framer/0055FF",
     },
 
-    // Mobile & Desktop (Added Flutter)
+    // Mobile & Desktop
     {
       name: "Flutter",
       category: "Mobile & Desktop",
@@ -173,6 +175,7 @@ export const portfolioData: PortfolioData = {
     },
   ],
 
+  // --- BAHASA INDONESIA ---
   id: {
     about: {
       heading: "Tentang Saya",
@@ -279,7 +282,6 @@ export const portfolioData: PortfolioData = {
         credentialUrl: "#",
       },
     ],
-    // --- LAYANAN (ID) - Updated dengan relatedSkills ---
     services: [
       {
         title: "Frontend Engineering",
@@ -288,7 +290,7 @@ export const portfolioData: PortfolioData = {
         relatedSkills: ["Next.js", "React", "Tailwind", "TypeScript", "Framer"],
       },
       {
-        title: "Mobile & Desktop Apps", // Diganti agar mencakup Flutter & Electron
+        title: "Mobile & Desktop Apps",
         desc: "Mengembangkan aplikasi lintas platform untuk Android, iOS, dan Desktop.",
         icon: "M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3",
         relatedSkills: ["Flutter", "React Native", "Electron"],
@@ -306,9 +308,91 @@ export const portfolioData: PortfolioData = {
         relatedSkills: ["Figma", "Git", "Docker", "Postman", "VS Code"],
       },
     ],
-    projects: [],
+
+    // --- DATA PROYEK (ID) ---
+    projects: [
+      {
+        id: "proj-1",
+        title: "SPARK AI Platform",
+        category: "AI Platform", // Disingkat untuk Filter
+        techStack: ["Next.js", "OpenAI API", "Tailwind", "React"],
+        description:
+          "Platform AI Generatif edukatif yang dikembangkan untuk event Techofest. Memiliki fitur chatbot cerdas interaktif dan antarmuka modern yang responsif.",
+        image:
+          "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=800&auto=format&fit=crop",
+        ],
+        linkUrl: "#",
+        githubUrl: "#",
+      },
+      {
+        id: "proj-2",
+        title: "Sistem Manajemen JTE",
+        category: "Web App",
+        techStack: ["Next.js", "Prisma", "PostgreSQL", "Role-Based Auth"],
+        description:
+          "Sistem informasi akademik untuk penjadwalan dan peminjaman ruang kelas. Dilengkapi fitur multi-user (Admin/User), validasi jadwal bentrok, dan sistem rating.",
+        image:
+          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
+        ],
+        githubUrl: "#",
+      },
+      {
+        id: "proj-3",
+        title: "RestoManager Desktop",
+        category: "Desktop App",
+        techStack: ["Electron", "React", "Node.js", "MySQL"],
+        description:
+          "Aplikasi kasir dan manajemen restoran berbasis desktop. Mendukung 3 role (Admin, Chef, Pelayan) untuk sinkronisasi pesanan dari dapur hingga pembayaran.",
+        image:
+          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=800&auto=format&fit=crop",
+        ],
+        githubUrl: "#",
+      },
+      {
+        id: "proj-4",
+        title: "Desa Leilem Profile",
+        category: "Web App",
+        techStack: ["Next.js", "Supabase", "Tailwind", "Framer Motion"],
+        description:
+          "Website profil desa digital untuk mempromosikan potensi pariwisata dan katalog produk UMKM lokal, dibangun sebagai bagian dari program digitalisasi desa.",
+        image:
+          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
+        ],
+        linkUrl: "#",
+      },
+      {
+        id: "proj-5", // Pastikan ID unik
+        title: "Health & Habit Tracker", // Contoh judul projek mandiri
+        category: "Mobile App", // Kategori ini akan otomatis memunculkan filter baru
+        techStack: ["Flutter", "Firebase", "Dart", "Riverpod"], // Stack Mobile modern
+        description:
+          "Proyek aplikasi mobile mandiri yang sedang dalam tahap pengembangan (Work in Progress). Aplikasi ini bertujuan membantu pengguna membangun kebiasaan positif melalui gamifikasi dan pelacakan harian yang intuitif.",
+        image:
+          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop", // Gambar Mockup Mobile
+        gallery: [
+          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+        ],
+        linkUrl: "",
+        githubUrl: "#",
+      },
+    ],
   },
 
+  // --- BAHASA INGGRIS ---
   en: {
     about: {
       heading: "About Me",
@@ -414,7 +498,6 @@ export const portfolioData: PortfolioData = {
         credentialUrl: "#",
       },
     ],
-    // --- LAYANAN (EN) - Updated ---
     services: [
       {
         title: "Frontend Engineering",
@@ -441,6 +524,88 @@ export const portfolioData: PortfolioData = {
         relatedSkills: ["Figma", "Git", "Docker", "Postman", "VS Code"],
       },
     ],
-    projects: [],
+
+    // --- DATA PROYEK (EN) ---
+    projects: [
+      {
+        id: "proj-1",
+        title: "SPARK AI Platform",
+        category: "AI Platform", // Category Disamakan
+        techStack: ["Next.js", "OpenAI API", "Tailwind", "React"],
+        description:
+          "An educational Generative AI platform developed for Techofest. Features an interactive intelligent chatbot and a modern responsive interface.",
+        image:
+          "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
+        // Gallery Disamakan
+        gallery: [
+          "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=800&auto=format&fit=crop",
+        ],
+        linkUrl: "#",
+        githubUrl: "#",
+      },
+      {
+        id: "proj-2",
+        title: "JTE Management System",
+        category: "Web App",
+        techStack: ["Next.js", "Prisma", "PostgreSQL", "Role-Based Auth"],
+        description:
+          "Academic information system for classroom scheduling and booking. Features multi-user roles (Admin/User), schedule conflict validation, and rating system.",
+        image:
+          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
+        ],
+        githubUrl: "#",
+      },
+      {
+        id: "proj-3",
+        title: "RestoManager Desktop",
+        category: "Desktop App",
+        techStack: ["Electron", "React", "Node.js", "MySQL"],
+        description:
+          "Desktop-based cashier and restaurant management application. Supports 3 roles (Admin, Chef, Waiter) to synchronize orders from kitchen to payment.",
+        image:
+          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=800&auto=format&fit=crop",
+        ],
+        githubUrl: "#",
+      },
+      {
+        id: "proj-4",
+        title: "Leilem Village Profile",
+        category: "Web App",
+        techStack: ["Next.js", "Supabase", "Tailwind", "Framer Motion"],
+        description:
+          "Digital village profile website to promote tourism potential and local MSME product catalogs, built as part of the village digitalization program.",
+        image:
+          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
+        ],
+        linkUrl: "#",
+      },
+      {
+        id: "proj-5",
+        title: "Health & Habit Tracker",
+        category: "Mobile App",
+        techStack: ["Flutter", "Firebase", "Dart", "Riverpod"],
+        description:
+          "Independent mobile application project currently under development (Work in Progress). This app aims to help users build positive habits through gamification and intuitive daily tracking.",
+        image:
+          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop",
+        gallery: [
+          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+        ],
+        linkUrl: "",
+        githubUrl: "#",
+      },
+    ],
   },
 };
