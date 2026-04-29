@@ -129,3 +129,32 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Lebar dan tinggi scrollbar keseluruhan */
+::-webkit-scrollbar {
+  width: 10px; /* Lebar untuk scroll vertikal */
+  height: 6px; /* Tinggi untuk scroll horizontal (seperti di slider Projects) */
+}
+
+/* Background dari jalur scrollbar (Track) */
+::-webkit-scrollbar-track {
+  background: #0a0a0a; /* Sesuai dengan warna background dominan kita */
+  border-radius: 8px;
+}
+
+/* Bagian yang bisa ditarik/digeser (Thumb) */
+::-webkit-scrollbar-thumb {
+  background: #333333; /* Warna abu-abu gelap saat diam */
+  border-radius: 8px;
+  border: 2px solid #0a0a0a; /* Efek padding agar tidak menempel di tepi layar */
+}
+
+/* Warna saat kursor berada di atas scrollbar (Hover) */
+::-webkit-scrollbar-thumb:hover {
+  background: #10b981; /* Warna Emerald-500 kita! */
+}
+
+/* Warna saat sedang ditarik/diklik (Active) */
+::-webkit-scrollbar-thumb:active {
+  background: #059669; /* Emerald-600 (sedikit lebih gelap) */
+}

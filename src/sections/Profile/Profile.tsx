@@ -1,21 +1,131 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { portfolioData } from "../../lib/data";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import Stack from "../../animations/Stack"; // Memanggil efek tumpukan foto
 
 interface ProfileProps {
   lang: "id" | "en";
 }
 
+// --- Counter Animation Hook ---
+function useCountUp(target: number, duration: number = 1500, startCounting: boolean = false) {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!startCounting) return;
+
+    let startTime: number | null = null;
+    let animationFrame: number;
+
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // easeOutExpo for a fast start, slow end feel
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(eased * target));
+
+      if (progress < 1) {
+        animationFrame = requestAnimationFrame(step);
+      }
+    };
+
+    animationFrame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrame);
+  }, [target, duration, startCounting]);
+
+  return count;
+}
+
+// --- Stat Counter Component ---
+function StatCounter({
+  value,
+  suffix,
+  label,
+  delay,
+}: {
+  value: number;
+  suffix: string;
+  label: string;
+  delay: number;
+}) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const [shouldCount, setShouldCount] = useState(false);
+  const count = useCountUp(value, 1500, shouldCount);
+
+  useEffect(() => {
+    if (isInView) {
+      const timeout = setTimeout(() => setShouldCount(true), delay);
+      return () => clearTimeout(timeout);
+    }
+  }, [isInView, delay]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: delay / 1000, duration: 0.5 }}
+      className="text-center"
+    >
+      <div className="text-3xl md:text-4xl font-bold text-white mb-1">
+        {count}
+        <span className="text-emerald-400">{suffix}</span>
+      </div>
+      <div className="text-xs font-mono text-gray-500 uppercase tracking-wider">
+        {label}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function Profile({ lang }: ProfileProps) {
   const data = portfolioData[lang];
   const [expandedExp, setExpandedExp] = useState<string | null>(null);
 
+  // Timeline scroll progress
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [timelineProgress, setTimelineProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return;
+      const rect = timelineRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      // Calculate how much of the timeline has scrolled through the viewport
+      const totalHeight = rect.height;
+      const scrolledPast = windowHeight - rect.top;
+      const progress = Math.max(0, Math.min(1, scrolledPast / (totalHeight + windowHeight * 0.3)));
+      setTimelineProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initial check
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const toggleGallery = (id: string) => {
     setExpandedExp(expandedExp === id ? null : id);
   };
+
+  // Stats data
+  const stats = lang === "id"
+    ? [
+        { value: 5, suffix: "+", label: "Proyek" },
+        { value: 3, suffix: "", label: "Platform" },
+        { value: 4, suffix: "+", label: "Pengalaman" },
+      ]
+    : [
+        { value: 5, suffix: "+", label: "Projects" },
+        { value: 3, suffix: "", label: "Platforms" },
+        { value: 4, suffix: "+", label: "Experiences" },
+      ];
 
   return (
     <section
@@ -77,6 +187,19 @@ export default function Profile({ lang }: ProfileProps) {
                 <p key={idx}>{paragraph}</p>
               ))}
             </div>
+
+            {/* --- Stats Counter --- */}
+            <div className="mt-10 pt-8 border-t border-white/[0.06] grid grid-cols-3 gap-6">
+              {stats.map((stat, idx) => (
+                <StatCounter
+                  key={stat.label}
+                  value={stat.value}
+                  suffix={stat.suffix}
+                  label={stat.label}
+                  delay={idx * 200}
+                />
+              ))}
+            </div>
           </div>
         </motion.div>
 
@@ -93,7 +216,19 @@ export default function Profile({ lang }: ProfileProps) {
             {lang === "id" ? "Riwayat Pengalaman" : "Experience History"}
           </motion.h2>
 
-          <div className="relative border-l border-white/10 ml-3 md:ml-0 space-y-16 pb-12">
+          {/* Timeline Container with animated fill */}
+          <div ref={timelineRef} className="relative ml-3 md:ml-0 space-y-16 pb-12">
+            {/* Static timeline line (background) */}
+            <div className="absolute left-0 top-0 bottom-0 w-[1px] bg-white/10" />
+
+            {/* Animated timeline fill (foreground) */}
+            <div
+              className="absolute left-0 top-0 w-[1px] bg-gradient-to-b from-emerald-400 to-emerald-400/20 origin-top transition-none"
+              style={{
+                height: `${timelineProgress * 100}%`,
+              }}
+            />
+
             {data.experiences.map((exp, index) => (
               <motion.div
                 key={exp.id}
@@ -107,8 +242,14 @@ export default function Profile({ lang }: ProfileProps) {
                   ease: "easeOut",
                 }}
               >
-                {/* Timeline Node */}
-                <div className="absolute left-[-5px] top-2.5 w-2.5 h-2.5 rounded-full bg-gray-600 group-hover:bg-emerald-400 group-hover:shadow-[0_0_12px_rgba(52,211,153,0.8)] transition-all duration-300"></div>
+                {/* Timeline Node — glows when scrolled past */}
+                <div
+                  className={`absolute left-[-5px] top-2.5 w-2.5 h-2.5 rounded-full transition-all duration-500 ${
+                    timelineProgress > (index + 0.5) / data.experiences.length
+                      ? "bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]"
+                      : "bg-gray-600 group-hover:bg-emerald-400 group-hover:shadow-[0_0_12px_rgba(52,211,153,0.8)]"
+                  }`}
+                />
 
                 {/* Header Pengalaman */}
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between mb-2 gap-2">

@@ -47,6 +47,7 @@ export interface Project {
   description: string;
   image: string; // Thumbnail Utama
   gallery: string[]; // Array Foto untuk Modal
+  status: "completed" | "in-progress" | "live"; // Status proyek
   linkUrl?: string;
   githubUrl?: string;
 }
@@ -61,12 +62,24 @@ export interface PortfolioContent {
   projects: Project[];
   certificates: Certificate[];
   services: Service[];
+  contact: ContactInfo; // <-- BARU
 }
 
 export interface PortfolioData {
   id: PortfolioContent;
   en: PortfolioContent;
   skills: Skill[];
+}
+
+export interface ContactInfo {
+  status: string;
+  location: string;
+  timeLabel: string;
+  email: string;
+  linkedin: string;
+  github: string;
+  successMsgTitle: string;
+  successMsgDesc: string;
 }
 
 // --- MAIN DATA ---
@@ -159,11 +172,6 @@ export const portfolioData: PortfolioData = {
       logo: "https://cdn.simpleicons.org/git/F05032",
     },
     {
-      name: "Docker",
-      category: "Tools",
-      logo: "https://cdn.simpleicons.org/docker/2496ED",
-    },
-    {
       name: "Postman",
       category: "Tools",
       logo: "https://cdn.simpleicons.org/postman/FF6C37",
@@ -180,10 +188,10 @@ export const portfolioData: PortfolioData = {
     about: {
       heading: "Tentang Saya",
       avatars: [
-        "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format",
-        "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format",
-        "https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format",
-        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format",
+        "/about/indra-1.jpeg",
+        "/about/indra-2.jpeg",
+        "/about/indra-3.jpg",
+        "/about/indra-4.jpg",
       ],
       bio: [
         "Halo! Saya seorang mahasiswa sekaligus Software Engineer yang sangat antusias dengan dunia Fullstack Development. Bagi saya, membangun perangkat lunak bukan sekadar merangkai baris kode, melainkan tentang menciptakan solusi utuh—mulai dari desain UI/UX yang intuitif, antarmuka yang responsif, hingga arsitektur backend dan database yang andal.",
@@ -202,8 +210,8 @@ export const portfolioData: PortfolioData = {
         ],
         skillTags: ["Next.js", "Leadership", "Fullstack", "Supabase"],
         images: [
-          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=400&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400&auto=format&fit=crop",
+          "/about/leilem-1.jpeg",
+          "/about/leilem-2.jpeg",
         ],
       },
       {
@@ -218,14 +226,15 @@ export const portfolioData: PortfolioData = {
         ],
         skillTags: ["Prototyping", "Corporate System", "Web App"],
         images: [
-          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop",
+          "/about/magang-1.jpeg",
+          "/about/magang-2.jpeg",
         ],
       },
       {
         id: "exp-3",
         role: "Frontend Developer",
         company: "SPARK - Techofest",
-        duration: "[Tahun]",
+        duration: "Okt 2024",
         description: [
           "Berkontribusi sebagai Frontend Developer pada proyek SPARK, sebuah platform AI Generatif edukatif yang diikutkan dalam event Techofest.",
           "Membangun antarmuka website utama SPARK, termasuk fitur Chatbot AI yang interaktif, serta merancang halaman About dan Team Profil yang responsif.",
@@ -239,7 +248,7 @@ export const portfolioData: PortfolioData = {
         id: "exp-4",
         role: "Software Engineer",
         company: "Proyek Akademik JTE",
-        duration: "[Tahun]",
+        duration: "2024",
         description: [
           "Sistem Manajemen Ruang Kelas: Membangun website penjadwalan dan peminjaman ruang kelas di Gedung JTE. Sistem ini menerapkan arsitektur multi-role (Superadmin, Admin, dan User) dengan hak akses spesifik, serta dilengkapi fitur rating dan ulasan.",
           "Aplikasi Manajemen Restoran: Mengembangkan aplikasi desktop kasir/manajemen restoran dengan otentikasi 3 peran pengguna: Admin (Laporan), Chef (Stok/Pesanan), dan Pelayan (Pemilihan Meja/Pembayaran).",
@@ -250,36 +259,43 @@ export const portfolioData: PortfolioData = {
           "Desktop App",
           "Scheduling System",
         ],
+        images: [
+          "/about/jte-1.jpeg",
+          "/about/jte-2.jpeg",
+          "/about/jte-3.jpeg",
+          "/about/jte-4.jpeg",
+        ],
       },
     ],
     certificates: [
       {
         id: "cert-1",
-        title: "Belajar Dasar Pemrograman Web",
-        issuer: "Dicoding Indonesia",
-        date: "2024",
-        credentialUrl: "#",
+        title: "C++ Course",
+        issuer: "Sololearn",
+        date: "Nov 2022",
+        credentialUrl: "/sertifikat/serti-1.png", 
       },
+      
       {
         id: "cert-2",
-        title: "Frontend Web Developer Expert",
-        issuer: "Dicoding Indonesia",
-        date: "2024",
-        credentialUrl: "#",
+        title: "Frontend Developer - SPARK Project",
+        issuer: "UNITY (TECHOFEST)",
+        date: "Nov 2024",
+        credentialUrl: "/sertifikat/serti-3.jpeg", 
       },
       {
         id: "cert-3",
-        title: "Sertifikasi Kompetensi BNSP",
-        issuer: "Badan Nasional Sertifikasi Profesi",
-        date: "2025",
-        credentialUrl: "#",
+        title: "Project Planning with AI",
+        issuer: "Sololearn",
+        date: "Mei 2025",
+        credentialUrl: "/sertifikat/serti-2.png", 
       },
       {
         id: "cert-4",
-        title: "React.js Essential Training",
-        issuer: "LinkedIn Learning",
-        date: "2023",
-        credentialUrl: "#",
+        title: "Intro to Software Engineering",
+        issuer: "RevoU",
+        date: "Jan 2026",
+        credentialUrl: "/sertifikat/serti-4.jpeg", 
       },
     ],
     services: [
@@ -305,7 +321,7 @@ export const portfolioData: PortfolioData = {
         title: "UI/UX & Tools",
         desc: "Menerjemahkan desain menjadi kode presisi serta manajemen versi.",
         icon: "M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.077-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42",
-        relatedSkills: ["Figma", "Git", "Docker", "Postman", "VS Code"],
+        relatedSkills: ["Figma", "Git", "Postman", "VS Code"],
       },
     ],
 
@@ -314,7 +330,7 @@ export const portfolioData: PortfolioData = {
       {
         id: "proj-1",
         title: "SPARK AI Platform",
-        category: "AI Platform", // Disingkat untuk Filter
+        category: "AI Platform", 
         techStack: ["Next.js", "OpenAI API", "Tailwind", "React"],
         description:
           "Platform AI Generatif edukatif yang dikembangkan untuk event Techofest. Memiliki fitur chatbot cerdas interaktif dan antarmuka modern yang responsif.",
@@ -325,8 +341,8 @@ export const portfolioData: PortfolioData = {
           "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=800&auto=format&fit=crop",
         ],
-        linkUrl: "#",
-        githubUrl: "#",
+        status: "completed",
+        githubUrl: "https://github.com/UNSRAT-IT-Community/front-end-spark-2024.git",
       },
       {
         id: "proj-2",
@@ -336,12 +352,14 @@ export const portfolioData: PortfolioData = {
         description:
           "Sistem informasi akademik untuk penjadwalan dan peminjaman ruang kelas. Dilengkapi fitur multi-user (Admin/User), validasi jadwal bentrok, dan sistem rating.",
         image:
-          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
+          "about/jte-4.jpeg",
         gallery: [
-          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
+          "/proyek/p2-1.jpeg",
+          "/proyek/p2-2.jpeg",
+          "/proyek/p2-3.jpeg",
         ],
-        githubUrl: "#",
+        status: "completed",
+        githubUrl: "https://github.com/rafalino26/framework-project.git",
       },
       {
         id: "proj-3",
@@ -351,12 +369,13 @@ export const portfolioData: PortfolioData = {
         description:
           "Aplikasi kasir dan manajemen restoran berbasis desktop. Mendukung 3 role (Admin, Chef, Pelayan) untuk sinkronisasi pesanan dari dapur hingga pembayaran.",
         image:
-          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
+          "/about/jte-1.jpeg",
         gallery: [
-          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=800&auto=format&fit=crop",
+          "/about/jte-2.jpeg",
+          "/about/jte-3.jpeg",
         ],
-        githubUrl: "#",
+        status: "completed",
+        githubUrl: "https://github.com/Yindraa/FE_Projek-Desktop.git",
       },
       {
         id: "proj-4",
@@ -366,30 +385,61 @@ export const portfolioData: PortfolioData = {
         description:
           "Website profil desa digital untuk mempromosikan potensi pariwisata dan katalog produk UMKM lokal, dibangun sebagai bagian dari program digitalisasi desa.",
         image:
-          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
+          "/about/leilem-1.jpeg",
         gallery: [
-          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
+          "/about/leilem-1.jpeg",
+          "/about/leilem-2.jpeg",
         ],
-        linkUrl: "#",
+        status: "live",
+        githubUrl: "https://github.com/Yindraa/website_kkt.git",
+        linkUrl: "https://website-desa-leilem.vercel.app/",
       },
       {
-        id: "proj-5", // Pastikan ID unik
-        title: "Health & Habit Tracker", // Contoh judul projek mandiri
-        category: "Mobile App", // Kategori ini akan otomatis memunculkan filter baru
-        techStack: ["Flutter", "Firebase", "Dart", "Riverpod"], // Stack Mobile modern
+        id: "proj-5", 
+        title: "MINUTscape - E-Tourism Platform",
+        category: "Web App",
+        techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
         description:
-          "Proyek aplikasi mobile mandiri yang sedang dalam tahap pengembangan (Work in Progress). Aplikasi ini bertujuan membantu pengguna membangun kebiasaan positif melalui gamifikasi dan pelacakan harian yang intuitif.",
+          "Platform pariwisata digital komprehensif untuk eksplorasi dan pemesanan destinasi di Minahasa Utara. Dilengkapi sistem reservasi end-to-end, pelaporan fasilitas lingkungan, serta dashboard admin interaktif untuk manajemen transaksi dan ulasan wisatawan secara real-time.",
         image:
-          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop", // Gambar Mockup Mobile
+          "/proyek/p5-1.jpeg", 
         gallery: [
-          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+          "/proyek/p5-2.jpeg", 
+          "/proyek/p5-3.jpeg", 
         ],
-        linkUrl: "",
-        githubUrl: "#",
+        status: "live", 
+        githubUrl: "https://github.com/Yindraa/Wisata_Minut.git", 
+        linkUrl: "https://wisata-minut.vercel.app/", 
+      },
+      {
+        id: "proj-6",
+        title: "Eco-Quest: Waste Reporting App",
+        category: "Mobile App",
+        techStack: ["Flutter", "Next.js", "Supabase", "PostgreSQL", "Google Maps API"],
+        description:
+          "Tugas Akhir berbasis prototipe yang sedang dalam pengembangan (Work in Progress). Eco-Quest adalah aplikasi mobile berbasis gamifikasi dan lokasi (SIG) yang dirancang untuk mendorong partisipasi remaja dalam pelaporan sampah liar di Kota Manado. Pengguna dapat melaporkan tumpukan sampah dengan foto dan koordinat GPS, mengikuti misi pembersihan gotong royong, serta merawat pohon virtual sebagai representasi kontribusi nyata mereka terhadap lingkungan. Sistem terintegrasi dengan dashboard web untuk Dinas Lingkungan Hidup sebagai pusat pemantauan dan pengambilan keputusan berbasis data spasial.",
+        image:
+          "/proyek/p6-1.jpeg",
+        gallery: [
+          "/proyek/p6-2.jpeg",
+          "/proyek/p6-3.jpeg",
+          ],
+          status: "in-progress",
+          linkUrl: "",
+          githubUrl: "#",
       },
     ],
+    contact: {
+      status: "Terbuka untuk Peluang Baru",
+      location: "Manado, Sulawesi Utara",
+      timeLabel: "Waktu Lokal",
+      email: "madenarayindra23@gmail.com",
+      linkedin: "linkedin.com/in/made-narayindra-10aa24244",
+      github: "github.com/Yindraa",
+      successMsgTitle: "Pesan Terkirim!",
+      successMsgDesc:
+        "Terima kasih telah menghubungi. Saya akan segera membalas pesan Anda.",
+    },
   },
 
   // --- BAHASA INGGRIS ---
@@ -397,10 +447,10 @@ export const portfolioData: PortfolioData = {
     about: {
       heading: "About Me",
       avatars: [
-        "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=500&auto=format",
-        "https://images.unsplash.com/photo-1449844908441-8829872d2607?q=80&w=500&auto=format",
-        "https://images.unsplash.com/photo-1452626212852-811d58933cae?q=80&w=500&auto=format",
-        "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?q=80&w=500&auto=format",
+        "/about/indra-1.jpeg",
+        "/about/indra-2.jpeg",
+        "/about/indra-3.jpg",
+        "/about/indra-4.jpg",
       ],
       bio: [
         "Hello! I am a student and Software Engineer highly enthusiastic about Fullstack Development. To me, building software is not just about writing lines of code, but about creating complete solutions—from intuitive UI/UX design and responsive interfaces to reliable backend and database architectures.",
@@ -419,8 +469,8 @@ export const portfolioData: PortfolioData = {
         ],
         skillTags: ["Next.js", "Leadership", "Fullstack", "Supabase"],
         images: [
-          "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=400&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=400&auto=format&fit=crop",
+          "/about/leilem-1.jpeg",
+          "/about/leilem-2.jpeg",
         ],
       },
       {
@@ -434,7 +484,8 @@ export const portfolioData: PortfolioData = {
         ],
         skillTags: ["Prototyping", "Corporate System", "Web App"],
         images: [
-          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop",
+          "/about/magang-1.jpeg",
+          "/about/magang-2.jpeg",
         ],
       },
       {
@@ -466,36 +517,42 @@ export const portfolioData: PortfolioData = {
           "Desktop App",
           "Scheduling System",
         ],
+        images: [
+          "/about/jte-1.jpeg",
+          "/about/jte-2.jpeg",
+          "/about/jte-3.jpeg",
+          "/about/jte-4.jpeg",
+        ],
       },
     ],
     certificates: [
       {
         id: "cert-1",
-        title: "Web Programming Basics",
-        issuer: "Dicoding Indonesia",
-        date: "2024",
-        credentialUrl: "#",
+        title: "C++ Course",
+        issuer: "Sololearn",
+        date: "Nov 2022",
+        credentialUrl: "/sertifikat/serti-1.png", 
       },
       {
         id: "cert-2",
-        title: "Frontend Web Developer Expert",
-        issuer: "Dicoding Indonesia",
-        date: "2024",
-        credentialUrl: "#",
+        title: "Frontend Developer - SPARK Project",
+        issuer: "UNITY (TECHOFEST)",
+        date: "Nov 2024",
+        credentialUrl: "/sertifikat/serti-3.jpeg", 
       },
       {
         id: "cert-3",
-        title: "BNSP Competency Certification",
-        issuer: "National Professional Certification Board",
-        date: "2025",
-        credentialUrl: "#",
+        title: "Project Planning with AI",
+        issuer: "Sololearn",
+        date: "May 2025",
+        credentialUrl: "/sertifikat/serti-2.png", 
       },
       {
         id: "cert-4",
-        title: "React.js Essential Training",
-        issuer: "LinkedIn Learning",
-        date: "2023",
-        credentialUrl: "#",
+        title: "Intro to Software Engineering",
+        issuer: "RevoU",
+        date: "Jan 2026",
+        credentialUrl: "/sertifikat/serti-4.jpeg", 
       },
     ],
     services: [
@@ -530,20 +587,19 @@ export const portfolioData: PortfolioData = {
       {
         id: "proj-1",
         title: "SPARK AI Platform",
-        category: "AI Platform", // Category Disamakan
+        category: "AI Platform", 
         techStack: ["Next.js", "OpenAI API", "Tailwind", "React"],
         description:
           "An educational Generative AI platform developed for Techofest. Features an interactive intelligent chatbot and a modern responsive interface.",
         image:
           "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
-        // Gallery Disamakan
         gallery: [
           "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=800&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1531746790731-6c087fecd65a?q=80&w=800&auto=format&fit=crop",
           "https://images.unsplash.com/photo-1555099962-4199c345e5dd?q=80&w=800&auto=format&fit=crop",
         ],
-        linkUrl: "#",
-        githubUrl: "#",
+        status: "completed",
+        githubUrl: "https://github.com/UNSRAT-IT-Community/front-end-spark-2024.git",
       },
       {
         id: "proj-2",
@@ -553,12 +609,14 @@ export const portfolioData: PortfolioData = {
         description:
           "Academic information system for classroom scheduling and booking. Features multi-user roles (Admin/User), schedule conflict validation, and rating system.",
         image:
-          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
+          "about/jte-4.jpeg",
         gallery: [
-          "https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=800&auto=format&fit=crop",
+          "/proyek/p2-1.jpeg",
+          "/proyek/p2-2.jpeg",
+          "/proyek/p2-3.jpeg",
         ],
-        githubUrl: "#",
+        status: "completed",
+        githubUrl: "https://github.com/rafalino26/framework-project.git",
       },
       {
         id: "proj-3",
@@ -568,12 +626,13 @@ export const portfolioData: PortfolioData = {
         description:
           "Desktop-based cashier and restaurant management application. Supports 3 roles (Admin, Chef, Waiter) to synchronize orders from kitchen to payment.",
         image:
-          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
+          "/about/jte-1.jpeg",
         gallery: [
-          "https://images.unsplash.com/photo-1556740758-90de374c12ad?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1556742049-0cfed4f7a07d?q=80&w=800&auto=format&fit=crop",
+          "/about/jte-2.jpeg",
+          "/about/jte-3.jpeg",
         ],
-        githubUrl: "#",
+        status: "completed",
+        githubUrl: "https://github.com/Yindraa/FE_Projek-Desktop.git",
       },
       {
         id: "proj-4",
@@ -583,29 +642,60 @@ export const portfolioData: PortfolioData = {
         description:
           "Digital village profile website to promote tourism potential and local MSME product catalogs, built as part of the village digitalization program.",
         image:
-          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
+          "/about/leilem-1.jpeg",
         gallery: [
-          "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=800&auto=format&fit=crop",
+          "/about/leilem-1.jpeg",
+          "/about/leilem-2.jpeg",
         ],
-        linkUrl: "#",
+        status: "live",
+        githubUrl: "https://github.com/Yindraa/website_kkt.git",
+        linkUrl: "https://website-desa-leilem.vercel.app/",
       },
       {
-        id: "proj-5",
-        title: "Health & Habit Tracker",
-        category: "Mobile App",
-        techStack: ["Flutter", "Firebase", "Dart", "Riverpod"],
+        id: "proj-5", 
+        title: "MINUTscape - E-Tourism Platform",
+        category: "Web App",
+        techStack: ["Next.js", "TypeScript", "Tailwind CSS", "Framer Motion"],
         description:
-          "Independent mobile application project currently under development (Work in Progress). This app aims to help users build positive habits through gamification and intuitive daily tracking.",
+          "A comprehensive digital tourism platform for exploring and booking destinations in North Minahasa. Features an end-to-end reservation system, environmental issue reporting, and an interactive admin dashboard for real-time transaction and review management.",
         image:
-          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop",
+          "/proyek/p5-1.jpeg", 
         gallery: [
-          "https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=800&auto=format&fit=crop",
-          "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+          "/proyek/p5-2.jpeg", 
+          "/proyek/p5-3.jpeg", 
         ],
+        status: "live", 
+        githubUrl: "https://github.com/Yindraa/Wisata_Minut.git", 
+        linkUrl: "https://wisata-minut.vercel.app/", 
+      },
+      {
+        id: "proj-6",
+        title: "Eco-Quest: Gamified Waste Reporting App",
+        category: "Mobile App",
+        techStack: ["Flutter", "Next.js", "Supabase", "PostgreSQL", "Google Maps API"],
+        description:
+          "Final year thesis project currently in active development (Work in Progress). Eco-Quest is a location-based mobile application that leverages gamification and Geographic Information Systems (GIS) to encourage youth participation in illegal waste reporting across Manado City, Indonesia. Users can report waste dumping sites with geotagged photos, claim and complete cleanup missions through a crowdsourcing mechanic, and nurture a virtual tree that grows with every real-world contribution — using loss aversion psychology to sustain daily engagement. The system is integrated with a web-based admin dashboard for the City Environmental Agency (DLH), enabling real-time spatial monitoring, report verification, and data-driven decision making for waste management operations.",
+        image:
+          "/proyek/p6-1.jpeg",
+        gallery: [
+          "/proyek/p6-2.jpeg",
+          "/proyek/p6-3.jpeg",
+          ],
+        status: "in-progress",
         linkUrl: "",
         githubUrl: "#",
       },
     ],
+    contact: {
+      status: "Open to New Opportunities",
+      location: "Manado, North Sulawesi",
+      timeLabel: "Local Time",
+      email: "madenarayindra23@gmail.com",
+      linkedin: "linkedin.com/in/made-narayindra-10aa24244",
+      github: "github.com/Yindraa",
+      successMsgTitle: "Message Sent!",
+      successMsgDesc:
+        "Thank you for reaching out. I'll get back to you as soon as possible.",
+    },
   },
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NavbarProps {
   lang: "id" | "en";
@@ -10,6 +11,52 @@ interface NavbarProps {
 const navLinks = {
   id: ["Profil", "Keahlian", "Proyek", "Kontak"],
   en: ["Profile", "Skills", "Projects", "Contact"],
+};
+
+// --- Mobile menu animation variants ---
+const menuVariants = {
+  hidden: {
+    opacity: 0,
+    height: 0,
+    transition: {
+      height: { duration: 0.3, ease: "easeInOut" as const },
+      opacity: { duration: 0.2 },
+    },
+  },
+  visible: {
+    opacity: 1,
+    height: "auto",
+    transition: {
+      height: { duration: 0.3, ease: "easeInOut" as const },
+      opacity: { duration: 0.2, delay: 0.1 },
+      staggerChildren: 0.06,
+      delayChildren: 0.15,
+    },
+  },
+  exit: {
+    opacity: 0,
+    height: 0,
+    transition: {
+      height: { duration: 0.25, ease: "easeInOut" as const, delay: 0.1 },
+      opacity: { duration: 0.15 },
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const menuItemVariants = {
+  hidden: { opacity: 0, x: -16 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.3, ease: "easeOut" as const },
+  },
+  exit: {
+    opacity: 0,
+    x: -10,
+    transition: { duration: 0.15 },
+  },
 };
 
 export default function Navbar({ lang, setLang }: NavbarProps) {
@@ -77,20 +124,31 @@ export default function Navbar({ lang, setLang }: NavbarProps) {
     id: string,
   ) => {
     e.preventDefault();
+    
+    // 1. Tutup menu mobile terlebih dahulu
     setIsOpen(false);
 
-    if (id === "") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
+    // 2. Gunakan setTimeout agar proses penutupan menu tidak membatalkan scroll di mobile
+    setTimeout(() => {
+      if (id === "") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
 
-    const element = document.getElementById(id);
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop,
-        behavior: "smooth",
-      });
-    }
+      const element = document.getElementById(id);
+      if (element) {
+        // 3. Gunakan getBoundingClientRect() untuk akurasi tinggi
+        const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+        
+        // 4. Opsional: Beri jarak offset agar judul section tidak tertutup oleh navbar fixed
+        const navbarHeight = 80; // Sesuaikan dengan perkiraan tinggi navbar kamu
+        
+        window.scrollTo({
+          top: elementPosition - navbarHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 150); // Jeda 150ms sudah sangat cukup untuk mobile browser
   };
 
   return (
@@ -121,7 +179,7 @@ export default function Navbar({ lang, setLang }: NavbarProps) {
           onClick={(e) => handleNavClick(e, "")}
           className="text-xl font-bold tracking-tighter text-white relative group"
         >
-          [Nama Anda]
+          [Yindra]
           <span className="text-emerald-400 transition-transform inline-block group-hover:translate-x-1">
             .
           </span>
@@ -175,72 +233,115 @@ export default function Navbar({ lang, setLang }: NavbarProps) {
             </span>
           </button>
 
+          {/* Hamburger → X Morphing Button */}
           <button
-            className="md:hidden p-2 -mr-2 text-gray-400 hover:text-white transition-colors"
+            className="md:hidden p-2 -mr-2 text-gray-400 hover:text-white transition-colors relative w-10 h-10 flex items-center justify-center"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle Menu"
           >
-            {isOpen ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />
-              </svg>
-            )}
+            <div className="w-5 h-4 relative flex flex-col justify-between">
+              {/* Line 1: rotates to form X top */}
+              <span
+                className={`block h-[1.5px] bg-current rounded-full transition-all duration-300 origin-center ${
+                  isOpen ? "rotate-45 translate-y-[7px]" : ""
+                }`}
+              />
+              {/* Line 2: fades out */}
+              <span
+                className={`block h-[1.5px] bg-current rounded-full transition-all duration-300 ${
+                  isOpen ? "opacity-0 scale-x-0" : ""
+                }`}
+              />
+              {/* Line 3: rotates to form X bottom */}
+              <span
+                className={`block h-[1.5px] bg-current rounded-full transition-all duration-300 origin-center ${
+                  isOpen ? "-rotate-45 -translate-y-[7px]" : ""
+                }`}
+              />
+            </div>
           </button>
         </div>
       </div>
 
-      {/* --- Mobile Dropdown Menu --- */}
-      <div
-        className={`md:hidden absolute top-full left-0 w-full bg-[#050505]/95 backdrop-blur-xl border-b border-white/10 transition-all duration-500 ease-in-out overflow-hidden flex flex-col items-center ${
-          isOpen ? "max-h-screen py-6 opacity-100" : "max-h-0 py-0 opacity-0"
-        }`}
-      >
-        {links.map((link, idx) => {
-          const sectionId = sectionIds[idx];
-          const isActive = activeSection === sectionId;
+      {/* --- Mobile Dropdown Menu (AnimatePresence) --- */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            variants={menuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="md:hidden absolute top-full left-0 w-full bg-[#050505] border-b border-white/10 overflow-hidden z-50"
+          >
+            <div className="flex flex-col px-8 py-5">
+              {links.map((link, idx) => {
+                const sectionId = sectionIds[idx];
+                const isActive = activeSection === sectionId;
+                const num = String(idx + 1).padStart(2, "0");
 
-          return (
-            <a
-              key={idx}
-              href={`#${sectionId}`}
-              onClick={(e) => handleNavClick(e, sectionId)}
-              className={`text-lg font-medium py-4 w-full text-center transition-colors duration-300 ${
-                isActive
-                  ? "text-emerald-400 bg-white/5"
-                  : "text-gray-300 hover:text-white hover:bg-white/5"
-              }`}
+                return (
+                  <motion.div
+                    key={idx}
+                    variants={menuItemVariants}
+                    className={`${
+                      idx < links.length - 1 ? "border-b border-white/[0.06]" : ""
+                    }`}
+                  >
+                    <a
+                      href={`#${sectionId}`}
+                      onClick={(e) => handleNavClick(e, sectionId)}
+                      className="group flex items-center gap-4 py-4 transition-colors duration-300 w-full"
+                    >
+                      {/* Number prefix */}
+                      <span className={`text-[11px] font-mono tracking-wider transition-colors duration-300 ${
+                        isActive ? "text-emerald-400" : "text-gray-600"
+                      }`}>
+                        {num}/
+                      </span>
+
+                      {/* Link text */}
+                      <span className={`text-lg font-medium tracking-tight transition-colors duration-300 ${
+                        isActive
+                          ? "text-emerald-400"
+                          : "text-gray-200 group-hover:text-white"
+                      }`}>
+                        {link}
+                      </span>
+
+                      {/* Active dot */}
+                      {isActive && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)] ml-auto" />
+                      )}
+                    </a>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Social links row */}
+            <motion.div
+              variants={menuItemVariants}
+              className="px-8 pb-5 pt-2 flex items-center gap-5 border-t border-white/[0.06]"
             >
-              {link}
-            </a>
-          );
-        })}
-      </div>
+              {/* Ubah array menjadi array of objects untuk menyimpan URL */}
+              {[
+                { name: "GitHub", url: "https://github.com/Yindraa" },
+                { name: "LinkedIn", url: "https://linkedin.com/in/made-narayindra-10aa24244" }
+              ].map((social) => (
+                <a
+                  key={social.name}
+                  href={social.url} // Arahkan href ke properti url
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[11px] font-mono text-gray-500 hover:text-emerald-400 transition-colors duration-300 uppercase tracking-wider"
+                >
+                  {social.name}
+                </a>
+              ))}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
